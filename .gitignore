@@ -34,3 +34,7 @@ docker-compose.override.yml
 *.log
 .rake_tasks~
 capybara-*.html
+md/*
+# Ignore key files for decrypting credentials and more.
+/config/*.key
+

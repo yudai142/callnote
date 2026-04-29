@@ -1,72 +1,61 @@
 source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-# Rails
-gem "rails", "~> 7.0.0"
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 8.1.3"
+# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+gem "propshaft"
+# Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
-gem "puma", "~> 5.0"
+# Use the Puma web server [https://github.com/puma/puma]
+gem "puma", ">= 5.0"
+# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem "jbuilder"
 
-# JavaScript/CSS
-gem "jsbundling-rails"
-gem "cssbundling-rails"
-gem "sprockets-rails"
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~> 3.1.7"
 
-# React
-gem "react-rails"
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+# Alpine Linux also needs tzinfo-data
+gem "tzinfo-data"
 
-# CSS Framework
-# gem "bootstrap", "~> 5.1.3"
-# gem "tailwindcss-rails"
+# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
 
-# Authentication
-gem "devise"
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
 
-# Background jobs
-gem "sidekiq", "~> 7.0"
-gem "redis", "~> 5.0"
+# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+gem "kamal", require: false
 
-# API clients
-gem "ruby-openai"
-gem "anthropic"
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem "thruster", require: false
 
-# CORS
-gem "rack-cors"
-
-# Storage
-gem "aws-sdk-s3", require: false
-
-# Environment variables
-gem "dotenv-rails", groups: [:development, :test]
-
-# Monitoring/Logging
-# gem "sentry-rails"
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  # Testing
-  gem "rspec-rails"
-  gem "factory_bot_rails"
-  gem "faker"
-  gem "shoulda-matchers", "~> 5.0"
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
-  # Linting
-  gem "rubocop", require: false
-  gem "rubocop-rails", require: false
-  gem "eslint-rails"
+  # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
+  gem "bundler-audit", require: false
+
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
+
+  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
-  # Debugging
-  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem "listen", "~> 3.3"
-
-  # Code quality
-  gem "bullet"
 end
 
 group :test do
-  # Testing
-  gem "capybara", ">= 3.26"
-  gem "selenium-webdriver", ">= 4.0.0.rc1"
-  gem "webdrivers"
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
 end
