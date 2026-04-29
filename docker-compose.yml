@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: callnote_db
+    environment:
+      POSTGRES_USER: callnote_user
+      POSTGRES_PASSWORD: callnote_password
+      POSTGRES_DB: callnote_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U callnote_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: callnote_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callnote_web
+    command: >
+      sh -c "bundle install &&
+             npm install &&
+             bin/rails db:prepare &&
+             bin/rails s -b 0.0.0.0"
+    volumes:
+      - .:/app
+      - bundle_cache:/app/vendor/bundle
+      - node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgresql://callnote_user:callnote_password@db:5432/callnote_development
+      REDIS_URL: redis://redis:6379
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-placeholder}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-sk-ant-placeholder}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callnote_sidekiq
+    command: >
+      sh -c "bundle install &&
+             npm install &&
+             bundle exec sidekiq"
+    volumes:
+      - .:/app
+      - bundle_cache:/app/vendor/bundle
+      - node_modules:/app/node_modules
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgresql://callnote_user:callnote_password@db:5432/callnote_development
+      REDIS_URL: redis://redis:6379
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-placeholder}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-sk-ant-placeholder}
+    depends_on:
+      - db
+      - redis
+
+  sidekiq-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callnote_sidekiq_web
+    command: >
+      sh -c "bundle install &&
+             npm install &&
+             bundle exec sidekiq-web"
+    volumes:
+      - .:/app
+      - bundle_cache:/app/vendor/bundle
+      - node_modules:/app/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgresql://callnote_user:callnote_password@db:5432/callnote_development
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
+  bundle_cache:
+  node_modules:

@@ -1,0 +1,36 @@
+# Rails
+.bundle/
+log/*
+tmp/*
+public/packs
+public/packs-test
+node_modules/
+yarn-error.log
+.byebug_history
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+coverage/
+.rspec_status
+spec/examples.txt
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Other
+*.log
+.rake_tasks~
+capybara-*.html
