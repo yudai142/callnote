@@ -74,3 +74,5 @@ group :test do
   # Shoulda matchers for better validations testing
   gem "shoulda-matchers", "~> 5.3"
 end
+
+gem "importmap-rails", "~> 2.2"
