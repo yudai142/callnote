@@ -45,3 +45,4 @@ md/*
 
 /node_modules
 .claude/*
+/md/*
