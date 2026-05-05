@@ -54,8 +54,16 @@ group :development do
   gem "web-console"
 end
 
+group :development, :test do
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
+end
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "rspec-expectations"
+  gem "shoulda-matchers"
 end
