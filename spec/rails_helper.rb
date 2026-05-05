@@ -65,6 +65,15 @@ RSpec.configure do |config|
   # To enable this behaviour uncomment the line below.
   # config.infer_spec_type_from_file_location!
 
+  # Include FactoryBot syntax helpers
+  config.include FactoryBot::Syntax::Methods
+
+  # Shoulda Matchers configuration
+  Shoulda::Matchers.configure do |shoulda_matchers|
+    shoulda_matchers.integrate(test_framework: :rspec)
+    shoulda_matchers.library = :rails
+  end
+
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
