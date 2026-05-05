@@ -1,6 +1,27 @@
-#!/usr/bin/env ruby
-require_relative "../config/boot"
-require "active_support/continuous_integration"
+#!/bin/bash
+set -e
 
-CI = ActiveSupport::ContinuousIntegration
-require_relative "../config/ci.rb"
+# CI script for Render deployment
+echo "=== Running CI build process ==="
+
+# Install dependencies
+echo "Installing gems..."
+bundle install --without development
+
+echo "Installing JavaScript dependencies..."
+npm ci
+
+# Prepare database
+echo "Preparing database..."
+bundle exec rails db:migrate
+
+# Precompile assets
+echo "Precompiling assets..."
+RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:precompile
+
+# Run tests
+echo "Running tests..."
+bundle exec rspec spec/models spec/requests spec/factories
+npm test
+
+echo "=== CI build completed successfully ==="

@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: callnote
+    env: ruby
+    plan: free
+    buildCommand: ./bin/ci
+    startCommand: bundle exec puma -t 8:16 -w 1 -b tcp://0.0.0.0:$PORT
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: true
+      - key: SECRET_KEY_BASE
+        sync: false
+      - key: DATABASE_URL
+        fromService:
+          type: pgsql
+          name: callnote-db
+          property: connectionString
+      - key: REDIS_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+
+  - type: pgsql
+    name: callnote-db
+    plan: free
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: Allow all connections
