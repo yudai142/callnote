@@ -14,14 +14,14 @@ RSpec.describe "Call Audio Attachment", type: :model do
       expect(call).to validate_presence_of(:audio).on(:create)
     end
 
-    it "provides audio URL" do
+    it "provides audio URL when attached" do
       call = create(:call, user: user)
-      expect(call.audio_url).to be_nil
+      expect(call.audio_url).to be_present
     end
 
-    it "provides audio filename" do
+    it "provides audio filename when attached" do
       call = create(:call, user: user)
-      expect(call.audio_filename).to be_nil
+      expect(call.audio_filename).to be_present
     end
   end
 
