@@ -29,11 +29,16 @@ development:
 
 test:
   <<: *default
+  <% if ENV["DATABASE_URL"] %>
+  url: <%= ENV["DATABASE_URL"] %>
+  database: callnote_test
+  <% else %>
   database: callnote_test
   username: callnote_user
   password: callnote_password
   host: localhost
   port: 5432
+  <% end %>
 
 production:
   primary: &primary_production
