@@ -37,12 +37,13 @@ export default function CallDetail({ call, onClose }) {
         <div className="flex-1">
           <h2 className="text-3xl font-bold text-gray-900">{call.title}</h2>
           <time className="text-sm text-gray-500 mt-2 block">
-            {new Date(call.created_at).toLocaleDateString('ja-JP')}
+            {call.created_at}
           </time>
         </div>
         <button
           onClick={onClose}
           className="text-2xl text-gray-400 hover:text-gray-600 focus:outline-none"
+          aria-label="閉じる"
         >
           ✕
         </button>
@@ -86,13 +87,6 @@ export default function CallDetail({ call, onClose }) {
         </div>
       )}
 
-      {!call.transcription && isProcessing && (
-        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-          <p className="text-yellow-800">
-            音声の処理中です。少々お待ちください...
-          </p>
-        </div>
-      )}
     </div>
   );
 }

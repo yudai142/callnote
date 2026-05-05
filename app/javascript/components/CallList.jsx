@@ -50,7 +50,7 @@ export default function CallList({ calls, onSelectCall }) {
             <div className="flex-1">
               <h3 className="font-semibold text-lg text-gray-900">{call.title}</h3>
               <p className="text-sm text-gray-500 mt-1">
-                {new Date(call.created_at).toLocaleDateString('ja-JP')}
+                {call.created_at}
               </p>
             </div>
             <div className="text-right">
