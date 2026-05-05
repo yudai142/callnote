@@ -80,23 +80,25 @@ export default function CallUploader({ onUploadComplete }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="audio-input" className="block text-sm font-medium text-gray-700 mb-2">
           音声ファイル
         </label>
-        <button
-          type="button"
-          onClick={handleFileButtonClick}
-          className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors relative"
-        >
+        <div className="relative flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors">
           <input
             ref={fileInputRef}
             id="audio-input"
             type="file"
             accept="audio/*"
             onChange={handleFileChange}
-            className="hidden absolute"
+            className="hidden"
             required
           />
+          <label
+            htmlFor="audio-input"
+            role="button"
+            aria-label="ファイルを選択"
+            className="absolute inset-0 flex items-center justify-center cursor-pointer"
+          >
           <div className="text-center pointer-events-none">
             <svg className="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
               <path d="M28 8H12a4 4 0 00-4 4v20a4 4 0 004 4h24a4 4 0 004-4V20m-8-12v12m0 0l-4-4m4 4l4-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -113,7 +115,8 @@ export default function CallUploader({ onUploadComplete }) {
             </p>
             <p className="text-xs text-gray-500 mt-1">MP3, WAV, M4A など</p>
           </div>
-        </button>
+          </label>
+        </div>
       </div>
 
       {error && (
