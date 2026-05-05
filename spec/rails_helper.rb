@@ -68,14 +68,14 @@ RSpec.configure do |config|
   # Include FactoryBot syntax helpers
   config.include FactoryBot::Syntax::Methods
 
-  # Shoulda Matchers configuration
-  Shoulda::Matchers.configure do |shoulda_matchers|
-    shoulda_matchers.integrate(test_framework: :rspec)
-    shoulda_matchers.library = :rails
-  end
-
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+end
+
+# Shoulda Matchers configuration
+Shoulda::Matchers.configure do |config|
+  config.integrate(test_framework: :rspec)
+  config.library = :rails
 end
