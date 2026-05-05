@@ -7,7 +7,7 @@ gem "propshaft"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
+gem "puma", ">= 6.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
@@ -15,7 +15,7 @@ gem "jbuilder"
 # gem "bcrypt", "~> 3.1.7"
 
 # Devise gem for authentication
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0.3"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # Alpine Linux also needs tzinfo-data

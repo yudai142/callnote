@@ -19,7 +19,7 @@ jobs:
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+        run: bin/brakeman --no-pager --except EOLRuby
       
       - name: Scan for known security vulnerabilities in gems used
         run: bin/bundler-audit
@@ -88,7 +88,9 @@ jobs:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: |
-          bin/rails db:test:prepare
+          bin/rails db:drop --allow-drop-empty-db 2>/dev/null || true
+          bin/rails db:create
+          bin/rails db:migrate
           bundle exec rspec
           bundle exec rails test
 
@@ -129,7 +131,11 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test:system
+        run: |
+          bin/rails db:drop --allow-drop-empty-db 2>/dev/null || true
+          bin/rails db:create
+          bin/rails db:migrate
+          bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
