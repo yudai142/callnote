@@ -6,7 +6,6 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'shoulda/matchers'
-
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -24,18 +23,14 @@ require 'shoulda/matchers'
 #
 # Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 
-# Checks for pending migrations and applies them before tests are run.
+# Ensures that the test database schema matches the current schema file.
+# If there are pending migrations it will invoke `db:test:prepare` to
+# recreate the test database by loading the schema.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
-end
-Shoulda::Matchers.configure do |config|
-  config.integrate do |with|
-    with.test_framework :rspec
-    with.library :rails
-  end
 end
 
 RSpec.configure do |config|
@@ -52,23 +47,28 @@ RSpec.configure do |config|
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 
-  # RSpec Rails can automatically mix in different behaviours to your tests
-  # based on their file location, for example enabling you to call `get` and
-  # `post` in specs under `spec/controllers`.
+  # RSpec Rails uses metadata to mix in different behaviours to your tests,
+  # for example enabling you to call `get` and `post` in request specs. e.g.:
   #
-  # You can disable this behaviour by removing the line below, and instead
-  # explicitly tag your specs with their type, e.g.:
-  #
-  #     RSpec.describe UsersController, type: :controller do
+  #     RSpec.describe UsersController, type: :request do
   #       # ...
   #     end
   #
   # The different available types are documented in the features, such as in
-  # https://rspec.info/features/6-0/rspec-rails
+  # https://rspec.info/features/8-0/rspec-rails
   config.infer_spec_type_from_file_location!
+
+  # Include FactoryBot syntax helpers
+  config.include FactoryBot::Syntax::Methods
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+end
+
+# Shoulda Matchers configuration
+Shoulda::Matchers.configure do |config|
+  config.integrate(test_framework: :rspec)
+  config.library = :rails
 end

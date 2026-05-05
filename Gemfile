@@ -53,6 +53,12 @@ group :development, :test do
 
   # RSpec for testing
   gem "rspec-rails", "~> 6.1"
+
+  # Factory Bot for test data
+  gem "factory_bot_rails", "~> 6.4"
+
+  # Faker for realistic test data
+  gem "faker"
 end
 
 group :development do
@@ -64,9 +70,6 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-
-  # Factory Bot for test data
-  gem "factory_bot_rails", "~> 6.4"
 
   # Shoulda matchers for better validations testing
   gem "shoulda-matchers", "~> 5.3"
