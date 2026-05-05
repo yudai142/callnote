@@ -4,7 +4,7 @@ services:
     env: ruby
     plan: free
     buildCommand: ./bin/ci
-    startCommand: bundle exec puma -t 8:16 -w 1 -b tcp://0.0.0.0:$PORT
+    startCommand: bundle exec rails server -p 3000 -b 0.0.0.0
     envVars:
       - key: RAILS_ENV
         value: production
