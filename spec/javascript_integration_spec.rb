@@ -4,7 +4,7 @@ RSpec.describe "JavaScript Integration", type: :request do
   describe "React and importmap setup" do
     it "loads application.js in the page" do
       get "/"
-      expect(response.body).to include("javascript_importmap_tags")
+      expect(response.body).to include("importmap")
     end
 
     it "includes Tailwind CSS from CDN" do
