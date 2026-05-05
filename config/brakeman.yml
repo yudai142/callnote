@@ -1,8 +1,0 @@
----
-# Suppress specific Brakeman warnings
-ignore_warnings:
-  # Ignore EOLRuby check - Ruby 3.2 is still functional
-  # even though it reached EOL on 2026-03-31
-  # Plan to upgrade to Ruby 3.3+ in future refactoring
-  - check_type: EOLRuby
-    file: .ruby-version
