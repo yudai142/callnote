@@ -61,6 +61,9 @@ RSpec.configure do |config|
   # Include FactoryBot syntax helpers
   config.include FactoryBot::Syntax::Methods
 
+  # Include Devise test helpers for request specs
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
