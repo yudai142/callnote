@@ -1,7 +1,7 @@
-export default {
+module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/spec/javascript'],
-  testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
+  testMatch: ['**/__tests__/**/?(*.)+(js|jsx)', '**/?(*.)+(spec|test).(js|jsx)'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },

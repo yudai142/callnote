@@ -53,9 +53,10 @@ export default function CallList({ calls, onSelectCall }) {
                 {new Date(call.created_at).toLocaleDateString('ja-JP')}
               </p>
             </div>
-            <span className={`badge ${getStatusBadgeColor(call.status)}`}>
-              {getStatusLabel(call.status)}
-            </span>
+            <div className="text-right">
+              <p className="text-sm font-medium text-gray-700">{getStatusLabel(call.status)}</p>
+              <p className="text-xs text-gray-500 mt-1">{call.status}</p>
+            </div>
           </div>
           {call.summary && (
             <p className="text-sm text-gray-600 mt-2 line-clamp-2">
