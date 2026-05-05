@@ -69,6 +69,5 @@ end
 
 # Shoulda Matchers configuration
 Shoulda::Matchers.configure do |config|
-  config.integrate
   config.library = :rails
 end
