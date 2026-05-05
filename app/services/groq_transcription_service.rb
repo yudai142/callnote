@@ -18,7 +18,7 @@ class GroqTranscriptionService
 
   def transcribe
     # 音声ブロブを一時ファイルにダウンロードして API に送信
-    Tempfile.create(["audio", File.extname(@call.audio.filename.to_s)]) do |tmpfile|
+    Tempfile.create([ "audio", File.extname(@call.audio.filename.to_s) ]) do |tmpfile|
       tmpfile.binmode
       @call.audio.download { |chunk| tmpfile.write(chunk) }
       tmpfile.rewind
@@ -36,12 +36,12 @@ class GroqTranscriptionService
     # multipart/form-data フォームデータを構築
     request.set_form(
       [
-        ["model", WHISPER_MODEL],
-        ["response_format", "text"],
-        ["file", file, {
+        [ "model", WHISPER_MODEL ],
+        [ "response_format", "text" ],
+        [ "file", file, {
           filename: @call.audio.filename.to_s,
           content_type: @call.audio.content_type || "audio/wav"
-        }]
+        } ]
       ],
       "multipart/form-data"
     )
@@ -67,6 +67,8 @@ class GroqTranscriptionService
   end
 
   def groq_api_key
-    ENV.fetch("GROQ_API_KEY") { raise ApiError, "GROQ_API_KEY が設定されていません" }
+    ENV.fetch("GROQ_API_KEY")
+  rescue KeyError
+    raise ApiError, "GROQ_API_KEY が設定されていません"
   end
 end

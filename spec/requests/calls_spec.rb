@@ -29,7 +29,7 @@ RSpec.describe "Calls API", type: :request do
         get "/calls"
 
         body = JSON.parse(response.body)
-        expect(body.map { |c| c["id"] }).to eq([call3.id, call2.id, call1.id])
+        expect(body.map { |c| c["id"] }).to eq([ call3.id, call2.id, call1.id ])
       end
     end
 

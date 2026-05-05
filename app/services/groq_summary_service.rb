@@ -67,6 +67,8 @@ class GroqSummaryService
   end
 
   def groq_api_key
-    ENV.fetch("GROQ_API_KEY") { raise ApiError, "GROQ_API_KEY が設定されていません" }
+    ENV.fetch("GROQ_API_KEY")
+  rescue KeyError
+    raise ApiError, "GROQ_API_KEY が設定されていません"
   end
 end

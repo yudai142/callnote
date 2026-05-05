@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :call do
     association :user, strategy: :create
     sequence(:title) { |n| "Call #{n}" }
-    status "pending"
+    status { "pending" }
     transcription { Faker::Lorem.paragraphs(number: 3).join("\n") }
     summary { Faker::Lorem.paragraph }
     duration { rand(60..3600) }
