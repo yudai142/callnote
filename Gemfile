@@ -77,6 +77,9 @@ group :test do
 
   # Shoulda matchers for better validations testing
   gem "shoulda-matchers", "~> 5.3"
+
+  # WebMock for stubbing HTTP requests in tests
+  gem "webmock", "~> 3.0"
 end
 
 gem "importmap-rails", "~> 2.2"
