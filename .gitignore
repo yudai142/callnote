@@ -39,3 +39,4 @@ md/*
 /config/*.key
 
 .claude/*
+.claude/settings.local.json
