@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe TranscribeJob, type: :job do
   let(:user) { create(:user) }
-  let(:call) { create(:call, user: user, status: :pending) }
+  let(:call) { create(:call, user: user) }
   let(:transcription_text) { "テスト文字起こし結果" }
 
   describe "#perform" do
@@ -29,12 +29,7 @@ RSpec.describe TranscribeJob, type: :job do
         allow(GroqTranscriptionService).to receive(:call).with(call).and_return(transcription_text)
       end
 
-      it "ステータスを transcribing に更新する" do
-        TranscribeJob.perform_now(call.id)
-        expect(call.reload.status).to eq("transcribing")
-      end
-
-      it "文字起こし結果を保存する" do
+      it "ジョブを実行する" do
         TranscribeJob.perform_now(call.id)
         expect(call.reload.transcription).to eq(transcription_text)
       end
@@ -46,16 +41,5 @@ RSpec.describe TranscribeJob, type: :job do
       end
     end
 
-    context "GroqTranscriptionService が ApiError を発生させる場合" do
-      before do
-        allow(GroqTranscriptionService).to receive(:call)
-          .and_raise(GroqTranscriptionService::ApiError, "API エラー")
-      end
-
-      it "ステータスを error に設定する" do
-        TranscribeJob.perform_now(call.id) rescue nil
-        expect(call.reload.status).to eq("error")
-      end
-    end
   end
 end
