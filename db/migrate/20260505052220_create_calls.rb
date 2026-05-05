@@ -13,7 +13,6 @@ class CreateCalls < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :calls, :user_id
     add_index :calls, :status
     add_index :calls, :created_at
   end
