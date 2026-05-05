@@ -27,7 +27,7 @@ RSpec.describe "Call Audio Attachment", type: :model do
 
   describe "status enum" do
     it "has correct status options" do
-      expected_statuses = ["pending", "transcribing", "summarizing", "done", "error"]
+      expected_statuses = [ "pending", "transcribing", "summarizing", "done", "error" ]
       expect(Call.statuses.keys).to match_array(expected_statuses)
     end
 
@@ -43,7 +43,7 @@ RSpec.describe "Call Audio Attachment", type: :model do
       call2 = create(:call, user: user, created_at: 1.day.ago)
       call3 = create(:call, user: user, created_at: Time.current)
 
-      expect(Call.recent).to eq([call3, call2, call1])
+      expect(Call.recent).to eq([ call3, call2, call1 ])
     end
   end
 end
