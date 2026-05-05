@@ -14,6 +14,9 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
+# Devise gem for authentication
+gem "devise", "~> 4.9"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # Alpine Linux also needs tzinfo-data
 gem "tzinfo-data"
@@ -54,8 +57,19 @@ group :development do
   gem "web-console"
 end
 
+group :development, :test do
+  # RSpec for testing
+  gem "rspec-rails", "~> 6.1"
+end
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Factory Bot for test data
+  gem "factory_bot_rails", "~> 6.4"
+
+  # Shoulda matchers for better validations testing
+  gem "shoulda-matchers", "~> 5.3"
 end
