@@ -30,8 +30,7 @@ development:
 test:
   <<: *default
   <% if ENV["DATABASE_URL"] %>
-  url: <%= ENV["DATABASE_URL"] %>
-  database: callnote_test
+  url: <%= ENV["DATABASE_URL"] %>/callnote_test
   <% else %>
   database: callnote_test
   username: callnote_user
