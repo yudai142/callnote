@@ -21,7 +21,7 @@ RSpec.describe Call, type: :model do
 
   describe "status enum" do
     it "has correct status enum values" do
-      expect(Call.statuses.keys).to match_array(["pending", "transcribing", "summarizing", "done", "error"])
+      expect(Call.statuses.keys).to match_array([ "pending", "transcribing", "summarizing", "done", "error" ])
     end
   end
 end

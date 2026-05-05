@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   root "pages#home"
 
   # API routes
-  resources :calls, only: [:index, :create, :show, :destroy] do
+  resources :calls, only: [ :index, :create, :show, :destroy ] do
     member do
       get :audio
     end

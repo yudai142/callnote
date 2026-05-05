@@ -1,6 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user_api!
-  before_action :set_call, only: [:show, :destroy, :audio]
+  before_action :set_call, only: [ :show, :destroy, :audio ]
 
   def index
     @calls = current_user.calls.recent
