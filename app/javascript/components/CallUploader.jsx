@@ -83,20 +83,20 @@ export default function CallUploader({ onUploadComplete }) {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           音声ファイル
         </label>
-        <input
-          ref={fileInputRef}
-          id="audio-input"
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-          className="hidden"
-          required
-        />
         <button
           type="button"
           onClick={handleFileButtonClick}
-          className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors"
+          className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors relative"
         >
+          <input
+            ref={fileInputRef}
+            id="audio-input"
+            type="file"
+            accept="audio/*"
+            onChange={handleFileChange}
+            className="hidden absolute"
+            required
+          />
           <div className="text-center pointer-events-none">
             <svg className="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
               <path d="M28 8H12a4 4 0 00-4 4v20a4 4 0 004 4h24a4 4 0 004-4V20m-8-12v12m0 0l-4-4m4 4l4-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

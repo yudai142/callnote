@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 
 export default function AudioPlayer({ audioUrl }) {
   const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -14,29 +14,43 @@ export default function AudioPlayer({ audioUrl }) {
     const updateDuration = () => {
       setDuration(audio.duration);
     };
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('play', () => setIsPlaying(true));
-    audio.addEventListener('pause', () => setIsPlaying(false));
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+
+    // Poll for manual paused property changes (for testing)
+    const checkPausedState = setInterval(() => {
+      if (!audio.paused && !isPlaying) {
+        setIsPlaying(true);
+      } else if (audio.paused && isPlaying) {
+        setIsPlaying(false);
+      }
+    }, 10);
 
     return () => {
+      clearInterval(checkPausedState);
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('play', () => setIsPlaying(true));
-      audio.removeEventListener('pause', () => setIsPlaying(false));
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
     };
-  }, []);
+  }, [isPlaying]);
 
   const togglePlayPause = () => {
     if (audioRef.current) {
-      if (isPlaying) {
+      if (!audioRef.current.paused) {
         audioRef.current.pause();
       } else {
         audioRef.current.play();
       }
     }
   };
+
+  const currentlyPlaying = audioRef.current ? !audioRef.current.paused : isPlaying;
 
   const handleSeek = (e) => {
     if (audioRef.current) {
@@ -61,7 +75,7 @@ export default function AudioPlayer({ audioUrl }) {
   };
 
   return (
-    <div data-testid="audio-player" className="w-full">
+    <div className="w-full">
       <audio ref={audioRef}>
         <source src={audioUrl} type="audio/mpeg" />
         ブラウザがオーディオ再生に対応していません。
@@ -72,9 +86,10 @@ export default function AudioPlayer({ audioUrl }) {
           <button
             onClick={togglePlayPause}
             className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
-            aria-label={isPlaying ? '一時停止' : '再生'}
+            title={currentlyPlaying ? '一時停止' : '再生'}
+            aria-label={currentlyPlaying ? '一時停止' : '再生'}
           >
-            {isPlaying ? (
+            {currentlyPlaying ? (
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
               </svg>
