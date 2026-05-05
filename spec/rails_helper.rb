@@ -69,6 +69,6 @@ end
 
 # Shoulda Matchers configuration
 Shoulda::Matchers.configure do |config|
-  config.integrate(test_framework: :rspec)
+  config.integrate
   config.library = :rails
 end
