@@ -7,6 +7,8 @@ export default function CallUploader({ onUploadComplete }) {
   const [error, setError] = useState(null);
   const [fileName, setFileName] = useState('');
 
+  const fileInputRef = React.useRef(null);
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -14,6 +16,10 @@ export default function CallUploader({ onUploadComplete }) {
       setFileName(selectedFile.name);
       setError(null);
     }
+  };
+
+  const handleFileButtonClick = () => {
+    fileInputRef.current?.click();
   };
 
   const handleSubmit = async (e) => {
@@ -55,12 +61,15 @@ export default function CallUploader({ onUploadComplete }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <>
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">通話をアップロード</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="title-input" className="block text-sm font-medium text-gray-700 mb-2">
           通話タイトル
         </label>
         <input
+          id="title-input"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -75,18 +84,20 @@ export default function CallUploader({ onUploadComplete }) {
           音声ファイル
         </label>
         <input
+          ref={fileInputRef}
+          id="audio-input"
           type="file"
           accept="audio/*"
           onChange={handleFileChange}
           className="hidden"
-          id="audio-input"
           required
         />
-        <label
-          htmlFor="audio-input"
+        <button
+          type="button"
+          onClick={handleFileButtonClick}
           className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors"
         >
-          <div className="text-center">
+          <div className="text-center pointer-events-none">
             <svg className="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
               <path d="M28 8H12a4 4 0 00-4 4v20a4 4 0 004 4h24a4 4 0 004-4V20m-8-12v12m0 0l-4-4m4 4l4-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -102,7 +113,7 @@ export default function CallUploader({ onUploadComplete }) {
             </p>
             <p className="text-xs text-gray-500 mt-1">MP3, WAV, M4A など</p>
           </div>
-        </label>
+        </button>
       </div>
 
       {error && (
@@ -114,9 +125,9 @@ export default function CallUploader({ onUploadComplete }) {
 
       <button
         type="submit"
-        disabled={loading || !title || !file}
+        disabled={loading}
         className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-          loading || !title || !file
+          loading
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
             : 'bg-blue-600 text-white hover:bg-blue-700'
         }`}
@@ -124,5 +135,6 @@ export default function CallUploader({ onUploadComplete }) {
         {loading ? '通話をアップロード中...' : 'アップロード'}
       </button>
     </form>
+    </>
   );
 }

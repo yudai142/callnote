@@ -108,8 +108,7 @@ export default function AudioPlayer({ audioUrl }) {
         </div>
 
         <div className="flex items-center justify-between text-sm text-gray-600">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+          <span>{formatTime(currentTime)} / {formatTime(duration)}</span>
         </div>
       </div>
     </div>

@@ -36,9 +36,9 @@ export default function CallDetail({ call, onClose }) {
       <div className="flex items-start justify-between mb-6">
         <div className="flex-1">
           <h2 className="text-3xl font-bold text-gray-900">{call.title}</h2>
-          <p className="text-sm text-gray-500 mt-2">
+          <time className="text-sm text-gray-500 mt-2 block">
             {new Date(call.created_at).toLocaleDateString('ja-JP')}
-          </p>
+          </time>
         </div>
         <button
           onClick={onClose}
