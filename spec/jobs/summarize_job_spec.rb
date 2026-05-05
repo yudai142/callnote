@@ -43,6 +43,5 @@ RSpec.describe SummarizeJob, type: :job do
         SummarizeJob.perform_now(call.id)
       end
     end
-
   end
 end

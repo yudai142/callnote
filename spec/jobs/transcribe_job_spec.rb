@@ -40,6 +40,5 @@ RSpec.describe TranscribeJob, type: :job do
         }.to have_enqueued_job(SummarizeJob).with(call.id)
       end
     end
-
   end
 end
