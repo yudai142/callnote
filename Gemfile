@@ -76,7 +76,7 @@ group :test do
   gem "selenium-webdriver"
 
   # Shoulda matchers for better validations testing
-  gem "shoulda-matchers", "~> 5.3"
+  gem "shoulda-matchers", "~> 7.0"
 
   # WebMock for stubbing HTTP requests in tests
   gem "webmock", "~> 3.0"
