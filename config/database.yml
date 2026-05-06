@@ -21,11 +21,15 @@ default: &default
 
 development:
   <<: *default
+  <% if ENV["DATABASE_URL"] %>
+  url: <%= ENV["DATABASE_URL"] %>
+  <% else %>
   database: callnote_development
   username: callnote_user
   password: callnote_password
   host: localhost
   port: 5432
+  <% end %>
 
 test:
   <<: *default
