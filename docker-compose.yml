@@ -25,6 +25,9 @@ services:
     container_name: callnote_web
     command: >
       sh -c "bundle install &&
+             npm install &&
+             npm run build:css &&
+             npm run build &&
              bin/rails db:prepare &&
              bin/rails s -b 0.0.0.0"
     volumes:
