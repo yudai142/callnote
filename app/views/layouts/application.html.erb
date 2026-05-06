@@ -18,9 +18,6 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Tailwind CSS from CDN %>
-    <script src="https://cdn.tailwindcss.com"></script>
-
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
@@ -28,7 +25,6 @@
   </head>
 
   <body>
-    <div id="react-app"></div>
     <%= yield %>
   </body>
 </html>
