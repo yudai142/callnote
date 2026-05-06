@@ -22,10 +22,6 @@
     <%= stylesheet_link_tag :app %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= javascript_importmap_tags %>
-
-    <script>
-      window.userSignedIn = <%= user_signed_in? %>;
-    </script>
   </head>
 
   <body>
