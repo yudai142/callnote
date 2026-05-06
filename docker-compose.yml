@@ -23,13 +23,14 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: callnote_web
+    entrypoint: /bin/sh
     command: >
-      sh -c "bundle install &&
-             npm install &&
-             npm run build:css &&
-             npm run build &&
-             bin/rails db:prepare &&
-             bin/rails s -b 0.0.0.0"
+      -c "bundle install &&
+          npm install &&
+          npm run build:css &&
+          npm run build &&
+          bin/rails db:prepare &&
+          bin/rails s -b 0.0.0.0"
     volumes:
       - .:/rails
       - bundle_cache:/usr/local/bundle
@@ -38,6 +39,7 @@ services:
       - "3000:3000"
     environment:
       RAILS_ENV: development
+      BUNDLE_WITHOUT: ""
       DATABASE_URL: postgresql://callnote_user:callnote_password@db:5432/callnote_development
       OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-placeholder}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-sk-ant-placeholder}
