@@ -6,8 +6,7 @@ import LandingPage from "./components/LandingPage"
 document.addEventListener("DOMContentLoaded", () => {
   const rootElement = document.getElementById("react-app")
   if (rootElement) {
-    const userSignedIn = rootElement.dataset.userSignedIn === "true"
     const root = createRoot(rootElement)
-    root.render(userSignedIn ? <CallApp /> : <LandingPage />)
+    root.render(window.userSignedIn ? <CallApp /> : <LandingPage />)
   }
 })
