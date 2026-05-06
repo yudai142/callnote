@@ -18,6 +18,20 @@ RSpec.describe "JavaScript Integration", type: :request do
     end
   end
 
+  describe "Material Design setup" do
+    it "includes Material Symbols font from CDN" do
+      get "/"
+      expect(response.body).to include("fonts.googleapis.com/css2?family=Material+Symbols+Outlined")
+    end
+
+    it "includes Google Fonts Inter and Noto Sans JP" do
+      get "/"
+      expect(response.body).to include("fonts.googleapis.com")
+      expect(response.body).to include("Inter")
+      expect(response.body).to include("Noto+Sans+JP")
+    end
+  end
+
   describe "importmap configuration" do
     it "has React pinned in importmap" do
       importmap_config = Rails.root.join("config/importmap.rb").read
