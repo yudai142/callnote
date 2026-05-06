@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "JavaScript Integration", type: :request do
+  before(:each) do
+    host! "localhost"
+  end
+
   describe "React and importmap setup" do
     it "loads application.js in the page" do
       get "/"
