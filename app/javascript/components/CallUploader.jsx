@@ -6,6 +6,7 @@ export default function CallUploader({ onUploadComplete }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [fileName, setFileName] = useState('');
+  const [dragActive, setDragActive] = useState(false);
 
   const fileInputRef = React.useRef(null);
 
@@ -14,6 +15,29 @@ export default function CallUploader({ onUploadComplete }) {
     if (selectedFile) {
       setFile(selectedFile);
       setFileName(selectedFile.name);
+      setError(null);
+    }
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+      setFileName(droppedFile.name);
       setError(null);
     }
   };
@@ -28,7 +52,7 @@ export default function CallUploader({ onUploadComplete }) {
     setError(null);
 
     const formData = new FormData();
-    formData.append('call[title]', title);
+    formData.append('call[title]', title || fileName);
     if (file) {
       formData.append('call[audio]', file);
     }
@@ -60,84 +84,130 @@ export default function CallUploader({ onUploadComplete }) {
     }
   };
 
+  const guides = [
+    { icon: 'graphite', title: '高音質で記録', desc: '静かな環境での録音が推奨されます' },
+    { icon: 'auto_awesome', title: 'AI自動要約', desc: '文字起こし後に自動で要約を生成' },
+    { icon: 'group', title: 'チームで共有', desc: '同僚と転記内容を簡単に共有' },
+  ];
+
   return (
-    <>
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">通話をアップロード</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-8">
+      {/* Page Title */}
       <div>
-        <label htmlFor="title-input" className="block text-sm font-medium text-gray-700 mb-2">
-          通話タイトル
-        </label>
-        <input
-          id="title-input"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="例：営業会議 2026-05-05"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
+        <h1 className="text-3xl font-bold text-on-surface">音声ファイルをアップロード</h1>
+        <p className="text-on-surface-variant mt-2">MP3、WAV、M4A などの音声ファイルを選択してください</p>
       </div>
 
-      <div>
-        <label htmlFor="audio-input" className="block text-sm font-medium text-gray-700 mb-2">
-          音声ファイル
-        </label>
-        <div className="relative flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Title Input */}
+        <div>
+          <label htmlFor="title-input" className="block text-sm font-medium text-on-surface mb-2">
+            タイトル（オプション）
+          </label>
+          <input
+            id="title-input"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="例：営業会議 2026-05-05"
+            className="w-full px-4 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface placeholder-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+          />
+        </div>
+
+        {/* Drag & Drop Zone */}
+        <div
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+          className={`relative border-2 border-dashed rounded-[2rem] p-12 flex flex-col items-center justify-center text-center transition-all ${
+            dragActive
+              ? 'border-primary bg-primary-fixed'
+              : `border-outline-variant bg-gradient-to-br from-surface-container-lowest to-surface-container-low hover:border-primary group`
+          }`}
+        >
           <input
             ref={fileInputRef}
-            id="audio-input"
             type="file"
             accept="audio/*"
             onChange={handleFileChange}
             className="hidden"
-            required
           />
-          <label
-            htmlFor="audio-input"
-            role="button"
-            aria-label="ファイルを選択"
-            className="absolute inset-0 flex items-center justify-center cursor-pointer"
-          >
-          <div className="text-center pointer-events-none">
-            <svg className="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-              <path d="M28 8H12a4 4 0 00-4 4v20a4 4 0 004 4h24a4 4 0 004-4V20m-8-12v12m0 0l-4-4m4 4l4-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <p className="mt-2 text-sm text-gray-600">
-              {fileName ? (
-                <span className="font-medium text-blue-600">{fileName}</span>
-              ) : (
-                <>
-                  <span className="font-medium text-blue-600">ファイルを選択</span>
-                  <span className="text-gray-500"> またはドラッグ&ドロップ</span>
-                </>
-              )}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">MP3, WAV, M4A など</p>
+
+          <div className="w-24 h-24 bg-primary-fixed rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
+            <span className="material-symbols-outlined text-4xl text-primary" style={{ fontVariationSettings: "'wght' 200" }}>
+              upload_file
+            </span>
           </div>
-          </label>
+
+          {fileName ? (
+            <div>
+              <p className="text-lg font-medium text-primary mb-2">{fileName}</p>
+              <p className="text-sm text-on-surface-variant">別のファイルを選択するにはクリック</p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-lg font-medium text-on-surface mb-2">
+                ファイルをドラッグ&ドロップ
+              </p>
+              <p className="text-sm text-on-surface-variant mb-4">または</p>
+              <button
+                type="button"
+                onClick={handleFileButtonClick}
+                className="px-8 py-3 bg-primary text-on-primary rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow active:scale-95"
+              >
+                ファイルを選択
+              </button>
+            </div>
+          )}
+
+          <p className="text-xs text-on-surface-variant mt-6">
+            対応形式: <span className="font-medium">MP3、WAV、M4A、FLAC</span> | 最大サイズ: <span className="font-medium">500MB</span>
+          </p>
+        </div>
+
+        {/* Error Banner */}
+        {error && (
+          <div className="bg-error-container border border-error rounded-2xl p-4 flex items-start gap-4">
+            <span className="material-symbols-outlined text-error flex-shrink-0">error</span>
+            <div>
+              <p className="font-medium text-error mb-1">エラーが発生しました</p>
+              <p className="text-sm text-error opacity-90">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Upload Button */}
+        <button
+          type="submit"
+          disabled={loading || !file}
+          className={`w-full py-3 px-6 rounded-xl font-semibold text-sm transition-all ${
+            loading
+              ? 'bg-primary-fixed text-primary-fixed-dim cursor-not-allowed'
+              : !file
+              ? 'bg-surface-container text-on-surface-variant cursor-not-allowed'
+              : 'bg-primary text-on-primary hover:shadow-lg active:scale-95'
+          }`}
+        >
+          {loading ? '処理中...' : 'アップロードする'}
+        </button>
+      </form>
+
+      {/* Guide Section */}
+      <div>
+        <h2 className="text-lg font-bold text-on-surface mb-6">CallNote の特徴</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {guides.map((guide, idx) => (
+            <div key={idx} className="bg-surface-container-low border border-outline-variant/20 rounded-xl p-6 flex flex-col items-center text-center">
+              <div className="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center mb-4">
+                <span className="material-symbols-outlined text-primary text-xl">{guide.icon}</span>
+              </div>
+              <h3 className="font-semibold text-on-surface mb-2">{guide.title}</h3>
+              <p className="text-sm text-on-surface-variant">{guide.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
-
-      {error && (
-        <div className="alert alert-error">
-          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l-2-2m0 0l-2-2m2 2l2-2m-2 2l-2 2" /></svg>
-          <span>{error}</span>
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-          loading
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-600 text-white hover:bg-blue-700'
-        }`}
-      >
-        {loading ? '通話をアップロード中...' : 'アップロード'}
-      </button>
-    </form>
-    </>
+    </div>
   );
 }
