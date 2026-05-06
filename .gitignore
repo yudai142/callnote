@@ -48,6 +48,9 @@ md/*
 
 /storage/*
 !/storage/.keep
+!/storage/vq/
+/storage/vq/*
+!/storage/vq/.keep
 
 /node_modules
 .claude/*
