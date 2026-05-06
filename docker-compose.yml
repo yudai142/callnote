@@ -39,9 +39,9 @@ services:
              bin/rails db:prepare &&
              bin/rails s -b 0.0.0.0"
     volumes:
-      - .:/app
-      - bundle_cache:/app/vendor/bundle
-      - node_modules:/app/node_modules
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/rails/node_modules
     ports:
       - "3000:3000"
     environment:
@@ -55,6 +55,38 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+  esbuild:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callnote_esbuild
+    command: npm run watch
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/rails
+      - node_modules:/rails/node_modules
+    environment:
+      RAILS_ENV: development
+    depends_on:
+      - web
+
+  css-watcher:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callnote_css
+    command: npm run watch:css
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/rails
+      - node_modules:/rails/node_modules
+    environment:
+      RAILS_ENV: development
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
