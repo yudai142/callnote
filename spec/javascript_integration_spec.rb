@@ -7,9 +7,9 @@ RSpec.describe "JavaScript Integration", type: :request do
       expect(response.body).to include("importmap")
     end
 
-    it "includes Tailwind CSS from CDN" do
+    it "includes compiled Tailwind CSS from assets" do
       get "/"
-      expect(response.body).to include("cdn.tailwindcss.com")
+      expect(response.body).to include("application.tailwind.compiled")
     end
 
     it "includes React mount point" do
