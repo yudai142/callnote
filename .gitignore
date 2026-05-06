@@ -43,6 +43,12 @@ md/*
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
+/public/assets/*
+!/public/assets/.keep
+
+/storage/*
+!/storage/.keep
+
 /node_modules
 .claude/*
 /md/*
