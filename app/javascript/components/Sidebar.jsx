@@ -11,6 +11,25 @@ export default function Sidebar({ currentPage, onNavigate }) {
 
   const isActive = (page) => currentPage === page;
 
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    try {
+      const response = await fetch('/users/sign_out', {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': csrfToken,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        window.location.href = '/users/sign_in';
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-surface-container-low z-40 flex flex-col border-r border-outline-variant/30">
       {/* Logo */}
@@ -61,14 +80,13 @@ export default function Sidebar({ currentPage, onNavigate }) {
         </button>
 
         {/* Logout Link */}
-        <a
-          href="/users/sign_out"
-          data-turbo-method="delete"
+        <button
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 text-error hover:bg-error-container/10 rounded-lg text-sm transition-colors"
         >
           <span className="material-symbols-outlined text-base">logout</span>
           <span>ログアウト</span>
-        </a>
+        </button>
       </div>
     </aside>
   );
