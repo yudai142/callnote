@@ -2,6 +2,8 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  # Remove stale pid file
+  rm -f /rails/tmp/pids/server.pid
   ./bin/rails db:prepare
 fi
 
