@@ -4,6 +4,9 @@ module.exports = {
     './app/javascript/**/*.jsx',
     './app/javascript/**/*.js'
   ],
+  safelist: [
+    { pattern: /^(bg|text|border|from|to|via|divide|placeholder|accent|opacity|shadow|hover|focus|active)-/ },
+  ],
   theme: {
     extend: {
       colors: {
