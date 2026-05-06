@@ -21,6 +21,8 @@ export default function CallApp() {
         const data = await response.json();
         setCalls(data);
         setLoading(false);
+      } else if (response.status === 401) {
+        window.location.href = '/users/sign_in';
       }
     } catch (error) {
       console.error('Failed to fetch calls:', error);
