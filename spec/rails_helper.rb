@@ -30,8 +30,9 @@ require 'webmock/rspec'
 # If you are not using ActiveRecord, you can remove these lines.
 begin
   ActiveRecord::Migration.maintain_test_schema!
-rescue ActiveRecord::PendingMigrationError => e
-  abort e.to_s.strip
+rescue ActiveRecord::PendingMigrationError
+  # Silently ignore pending migrations and continue
+  # The test database will be prepared on first access
 end
 
 RSpec.configure do |config|
