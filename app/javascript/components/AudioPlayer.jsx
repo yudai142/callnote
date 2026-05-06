@@ -6,6 +6,7 @@ export default function AudioPlayer({ audioUrl }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -30,7 +31,6 @@ export default function AudioPlayer({ audioUrl }) {
       } else if (audio.paused && isPlaying) {
         setIsPlaying(false);
       }
-      // Update button aria-label manually to handle test cases where audio.paused is changed directly
       if (buttonRef.current) {
         const label = audio.paused ? '再生' : '一時停止';
         buttonRef.current.setAttribute('aria-label', label);
@@ -57,9 +57,22 @@ export default function AudioPlayer({ audioUrl }) {
     }
   };
 
+  const skipTime = (seconds) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.max(0, Math.min(duration, audioRef.current.currentTime + seconds));
+    }
+  };
+
   const handleSeek = (e) => {
     if (audioRef.current) {
       audioRef.current.currentTime = parseFloat(e.target.value);
+    }
+  };
+
+  const handlePlaybackRate = (rate) => {
+    setPlaybackRate(rate);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = rate;
     }
   };
 
@@ -79,6 +92,10 @@ export default function AudioPlayer({ audioUrl }) {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
+  // 波形モック（プログレスバー）
+  const waveformBars = 50;
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
   return (
     <div className="w-full">
       <audio ref={audioRef}>
@@ -86,50 +103,108 @@ export default function AudioPlayer({ audioUrl }) {
         ブラウザがオーディオ再生に対応していません。
       </audio>
 
-      <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-        <div className="flex items-center gap-4 mb-4">
+      <div className="relative bg-surface/60 backdrop-blur-xl border border-white/40 rounded-2xl p-6 shadow-sm">
+        {/* Left Border Accent */}
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-2xl" />
+
+        {/* Main Controls */}
+        <div className="flex items-center gap-6 mb-6">
+          {/* Play Button */}
           <button
             ref={buttonRef}
             onClick={togglePlayPause}
-            className="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
+            className="flex-shrink-0 w-14 h-14 flex items-center justify-center bg-primary text-on-primary rounded-full hover:shadow-lg hover:scale-110 transition-all active:scale-95"
             title={isPlaying ? '一時停止' : '再生'}
             aria-label={isPlaying ? '一時停止' : '再生'}
           >
             {isPlaying ? (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-              </svg>
+              <span className="material-symbols-outlined text-2xl">pause</span>
             ) : (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
+              <span className="material-symbols-outlined text-2xl">play_arrow</span>
             )}
           </button>
 
-          <div className="flex-1">
-            <input
-              type="range"
-              min="0"
-              max={duration || 0}
-              value={currentTime}
-              onChange={handleSeek}
-              className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-            />
+          {/* Waveform with Progress */}
+          <div className="flex-1 flex items-center gap-1 h-12 bg-primary/10 rounded-lg px-3">
+            {Array.from({ length: waveformBars }).map((_, i) => (
+              <div
+                key={i}
+                className="flex-1 h-8 bg-primary/30 rounded-full transition-colors"
+                style={{
+                  backgroundColor: i < (progress / 100) * waveformBars ? 'rgb(70, 72, 212)' : 'rgba(70, 72, 212, 0.3)',
+                }}
+              />
+            ))}
           </div>
 
+          {/* Skip Controls */}
+          <button
+            onClick={() => skipTime(-15)}
+            className="p-2 hover:bg-surface-container-high rounded-lg transition-colors text-on-surface-variant"
+            title="15秒戻す"
+          >
+            <span className="material-symbols-outlined">fast_rewind</span>
+          </button>
+
+          <button
+            onClick={() => skipTime(15)}
+            className="p-2 hover:bg-surface-container-high rounded-lg transition-colors text-on-surface-variant"
+            title="15秒進む"
+          >
+            <span className="material-symbols-outlined">fast_forward</span>
+          </button>
+
+          {/* Volume */}
+          <button
+            className="p-2 hover:bg-surface-container-high rounded-lg transition-colors text-on-surface-variant"
+            title="音量"
+          >
+            <span className="material-symbols-outlined">volume_up</span>
+          </button>
+
+          {/* Download */}
           <button
             onClick={handleDownload}
-            className="flex-shrink-0 p-2 text-gray-600 hover:text-blue-600 transition-colors"
-            aria-label="ダウンロード"
+            className="p-2 hover:bg-surface-container-high rounded-lg transition-colors text-on-surface-variant"
+            title="ダウンロード"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
+            <span className="material-symbols-outlined">download</span>
           </button>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <span>{formatTime(currentTime)} / {formatTime(duration)}</span>
+        {/* Seek Bar */}
+        <div className="mb-4">
+          <input
+            type="range"
+            min="0"
+            max={duration || 0}
+            value={currentTime}
+            onChange={handleSeek}
+            className="w-full h-2 bg-outline-variant rounded-lg appearance-none cursor-pointer accent-primary"
+          />
+        </div>
+
+        {/* Time & Speed Controls */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-on-surface-variant font-medium">
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </span>
+
+          <div className="flex items-center gap-2">
+            {[1, 1.25, 1.5, 2].map((rate) => (
+              <button
+                key={rate}
+                onClick={() => handlePlaybackRate(rate)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  playbackRate === rate
+                    ? 'bg-primary text-on-primary'
+                    : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container'
+                }`}
+              >
+                {rate}x
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
