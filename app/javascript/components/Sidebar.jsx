@@ -11,23 +11,28 @@ export default function Sidebar({ currentPage, onNavigate }) {
 
   const isActive = (page) => currentPage === page;
 
-  const handleLogout = async (e) => {
+  const handleLogout = (e) => {
     e.preventDefault();
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-    try {
-      const response = await fetch('/users/sign_out', {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-Token': csrfToken,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (response.ok) {
-        window.location.href = '/users/sign_in';
-      }
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/users/sign_out';
+
+    const methodInput = document.createElement('input');
+    methodInput.type = 'hidden';
+    methodInput.name = '_method';
+    methodInput.value = 'DELETE';
+
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'authenticity_token';
+    csrfInput.value = csrfToken;
+
+    form.appendChild(methodInput);
+    form.appendChild(csrfInput);
+    document.body.appendChild(form);
+    form.submit();
   };
 
   return (
