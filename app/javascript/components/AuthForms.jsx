@@ -6,32 +6,14 @@ function InputField({ id, label, type = 'text', name, autoComplete, required = t
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1.5">
         {label}
       </label>
-      <input
-        id={id}
-        type={type}
-        name={name}
-        autoComplete={autoComplete}
-        required={required}
-        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm
-                   focus:outline-none focus:ring-2 focus:ring-indigo-500
-                   focus:border-transparent transition-shadow placeholder-gray-400"
-      />
+      <input id={id} type={type} name={name} autoComplete={autoComplete} required={required} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow placeholder-gray-400" />
     </div>
   );
 }
 
 function SubmitButton({ label, loading = false }) {
   return (
-    <button
-      type="submit"
-      disabled={loading}
-      className={`w-full py-3 px-4 rounded-lg font-semibold text-sm
-        transition-all duration-200 ${
-          loading
-            ? 'bg-indigo-300 text-white cursor-not-allowed'
-            : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-md active:scale-[0.99]'
-        }`}
-    >
+    <button type="submit" disabled={loading} className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition-all duration-200 ${loading ? 'bg-indigo-300 text-white cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-md active:scale-[0.99]'}`}>
       {loading ? '処理中...' : label}
     </button>
   );

@@ -17,17 +17,12 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="flex-1 flex items-center justify-center px-8 py-16
-                      bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-800">
+      <div className="flex-1 flex items-center justify-center px-8 py-16 bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-800">
         <div className="text-white max-w-lg">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-white bg-opacity-20 rounded-xl
-                            flex items-center justify-center backdrop-blur-sm">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor"
-                   viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4
-                     m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            <div className="w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </div>
             <span className="text-2xl font-bold tracking-tight">CallNote</span>
@@ -46,19 +41,13 @@ export default function LandingPage() {
           <div className="flex gap-4 flex-wrap">
             <button
               onClick={openSignup}
-              className="px-7 py-3 bg-white text-indigo-700 font-semibold
-                         rounded-xl shadow-lg hover:bg-indigo-50
-                         transition-all duration-200 hover:shadow-xl
-                         hover:-translate-y-0.5 active:translate-y-0"
+              className="px-7 py-3 bg-white text-indigo-700 font-semibold rounded-xl shadow-lg hover:bg-indigo-50 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
             >
               無料で始める
             </button>
             <button
               onClick={openLogin}
-              className="px-7 py-3 border-2 border-white border-opacity-60
-                         text-white font-semibold rounded-xl
-                         hover:bg-white hover:bg-opacity-10
-                         transition-all duration-200"
+              className="px-7 py-3 border-2 border-white border-opacity-60 text-white font-semibold rounded-xl hover:bg-white hover:bg-opacity-10 transition-all duration-200"
             >
               ログイン
             </button>
