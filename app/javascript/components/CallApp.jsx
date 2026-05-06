@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Sidebar from './Sidebar';
+import Dashboard from './Dashboard';
 import CallList from './CallList';
 import CallUploader from './CallUploader';
 import CallDetail from './CallDetail';
@@ -7,6 +9,7 @@ export default function CallApp() {
   const [calls, setCalls] = useState([]);
   const [selectedCall, setSelectedCall] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState('dashboard');
 
   useEffect(() => {
     fetchCalls();
@@ -31,41 +34,88 @@ export default function CallApp() {
 
   const handleUploadComplete = () => {
     fetchCalls();
+    setCurrentPage('calls');
+  };
+
+  const handleSelectCall = (call) => {
+    setSelectedCall(call);
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return <Dashboard calls={calls} />;
+      case 'calls':
+        return loading ? (
+          <div className="flex items-center justify-center py-16">
+            <div className="text-on-surface-variant">読み込み中...</div>
+          </div>
+        ) : (
+          <CallList calls={calls} onSelectCall={handleSelectCall} />
+        );
+      case 'upload':
+        return <CallUploader onUploadComplete={handleUploadComplete} />;
+      case 'analytics':
+        return (
+          <div className="flex items-center justify-center py-16">
+            <div className="text-on-surface-variant">分析レポート（準備中）</div>
+          </div>
+        );
+      case 'settings':
+        return (
+          <div className="flex items-center justify-center py-16">
+            <div className="text-on-surface-variant">設定（準備中）</div>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto py-8 px-4">
-        <h1 className="text-4xl font-bold mb-8 text-gray-900">通話管理</h1>
+    <div className="min-h-screen bg-surface">
+      <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-6" data-testid="call-list">
-              <h2 className="text-2xl font-semibold mb-4">通話リスト</h2>
-              {loading ? (
-                <div className="text-center py-8">読み込み中...</div>
-              ) : (
-                <CallList calls={calls} onSelectCall={setSelectedCall} />
-              )}
-            </div>
+      {/* Main Content */}
+      <div className="ml-64 min-h-screen flex flex-col">
+        {/* Top App Bar */}
+        <header className="sticky top-0 h-16 bg-surface-container-low border-b border-outline-variant/30 flex items-center justify-between px-8 z-30">
+          <div className="flex-1" />
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-surface-container-high rounded-lg transition-colors">
+              <span className="material-symbols-outlined text-on-surface-variant">search</span>
+            </button>
+            <button className="p-2 hover:bg-surface-container-high rounded-lg transition-colors">
+              <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
+            </button>
+            <button className="p-2 hover:bg-surface-container-high rounded-lg transition-colors">
+              <span className="material-symbols-outlined text-on-surface-variant">history</span>
+            </button>
           </div>
+        </header>
 
-          <div>
-            <div className="bg-white rounded-lg shadow-md p-6" data-testid="call-uploader">
-              <h2 className="text-2xl font-semibold mb-4">新規アップロード</h2>
-              <CallUploader onUploadComplete={handleUploadComplete} />
-            </div>
+        {/* Page Content */}
+        <main className="flex-1 p-8">
+          <div className="max-w-7xl mx-auto">
+            {renderPage()}
+          </div>
+        </main>
+      </div>
+
+      {/* Call Detail Modal */}
+      {selectedCall && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-surface-container-lowest rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <button
+              onClick={() => setSelectedCall(null)}
+              className="absolute top-6 right-6 p-2 hover:bg-surface-container-high rounded-full transition-colors"
+            >
+              <span className="material-symbols-outlined text-on-surface">close</span>
+            </button>
+            <CallDetail call={selectedCall} onClose={() => setSelectedCall(null)} />
           </div>
         </div>
-
-        {selectedCall && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-auto">
-              <CallDetail call={selectedCall} onClose={() => setSelectedCall(null)} />
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
