@@ -10,9 +10,18 @@ class Users::SessionsController < Devise::SessionsController
       self.resource = warden.authenticate!(auth_options)
       set_flash_message(:notice, :signed_in)
       sign_in(resource_name, resource)
-      render json: { success: true, user: resource }, status: :ok
+
+      if request.format.json?
+        render json: { success: true, user: resource }, status: :ok
+      else
+        redirect_to root_path
+      end
     rescue Warden::InvalidCredentials
-      render json: { success: false, errors: ['メールアドレスまたはパスワードが正しくありません'] }, status: :unauthorized
+      if request.format.json?
+        render json: { success: false, errors: ['メールアドレスまたはパスワードが正しくありません'] }, status: :unauthorized
+      else
+        redirect_to new_user_session_path, alert: 'メールアドレスまたはパスワードが正しくありません'
+      end
     end
   end
 
