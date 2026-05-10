@@ -2,7 +2,6 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
-  respond_to :json
 
   # POST /resource
   def create
@@ -11,9 +10,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
     resource.save
     if resource.persisted?
       sign_up(resource_name, resource)
-      render json: { success: true, user: resource }, status: :created
+      respond_to do |format|
+        format.json { render json: { success: true, user: resource }, status: :created }
+        format.html { redirect_to root_path, notice: 'アカウントを作成しました' }
+      end
     else
-      render json: { success: false, errors: resource.errors.full_messages }, status: :unprocessable_entity
+      errors = resource.errors.full_messages
+      respond_to do |format|
+        format.json { render json: { success: false, errors: errors }, status: :unprocessable_entity }
+        format.html do
+          flash[:alert] = errors.join(', ')
+          render :new
+        end
+      end
     end
   end
 
