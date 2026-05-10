@@ -179,15 +179,33 @@ export function SignupForm({ onSwitchToLogin }) {
         body: JSON.stringify(data)
       });
 
+      console.log('Registration response status:', response.status);
+      console.log('Registration response headers:', response.headers.get('content-type'));
+
       if (response.ok) {
+        const result = await response.json();
+        console.log('Registration success:', result);
         window.location.href = '/';
       } else {
-        const result = await response.json();
-        const errorList = result.errors || ['アカウント作成に失敗しました'];
+        const contentType = response.headers.get('content-type');
+        let errorList = ['アカウント作成に失敗しました'];
+
+        if (contentType && contentType.includes('application/json')) {
+          try {
+            const result = await response.json();
+            errorList = result.errors || errorList;
+          } catch (e) {
+            console.error('Failed to parse JSON response:', e);
+          }
+        } else {
+          console.warn('Non-JSON response received:', contentType);
+        }
+
         setErrors(errorList);
         setShowErrorPopup(true);
       }
     } catch (error) {
+      console.error('Registration error:', error);
       setErrors(['通信エラーが発生しました']);
       setShowErrorPopup(true);
     } finally {
