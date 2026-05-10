@@ -99,6 +99,7 @@ export function LoginForm({ onSwitchToSignup }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           'X-CSRF-Token': csrfToken
         },
         body: JSON.stringify(data)
@@ -108,7 +109,8 @@ export function LoginForm({ onSwitchToSignup }) {
         window.location.href = '/';
       } else {
         const result = await response.json();
-        const errorList = result.errors || ['ログインに失敗しました'];
+        // Handle both custom format { success: false, errors: [...] } and Devise default format { error: "..." }
+        const errorList = result.errors || (result.error ? [result.error] : ['ログインに失敗しました']);
         setErrors(errorList);
         setShowErrorPopup(true);
       }
@@ -198,6 +200,7 @@ export function SignupForm({ onSwitchToLogin }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           'X-CSRF-Token': csrfToken
         },
         body: JSON.stringify(data)
