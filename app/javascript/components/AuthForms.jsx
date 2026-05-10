@@ -29,12 +29,12 @@ function SubmitButton({ label, loading = false }) {
   );
 }
 
-function ErrorPopup({ errors, onClose }) {
-  if (!errors || errors.length === 0) return null;
+function ErrorPopup({ errors, isOpen, onClose }) {
+  if (!isOpen || !errors || errors.length === 0) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
+      <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl" onClick={(e) => e.stopPropagation()}>
         <h3 className="text-lg font-semibold text-red-600 mb-3">エラーが発生しました</h3>
         <ul className="space-y-2 mb-4">
           {errors.map((error, idx) => (
@@ -101,9 +101,14 @@ export function LoginForm({ onSwitchToSignup }) {
     }
   };
 
+  const handleCloseError = () => {
+    setShowErrorPopup(false);
+    setErrors([]);
+  };
+
   return (
     <>
-      <ErrorPopup errors={errors} onClose={() => { setShowErrorPopup(false); setErrors([]); }} />
+      <ErrorPopup errors={errors} isOpen={showErrorPopup} onClose={handleCloseError} />
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <InputField
@@ -213,9 +218,14 @@ export function SignupForm({ onSwitchToLogin }) {
     }
   };
 
+  const handleCloseError = () => {
+    setShowErrorPopup(false);
+    setErrors([]);
+  };
+
   return (
     <>
-      <ErrorPopup errors={errors} onClose={() => { setShowErrorPopup(false); setErrors([]); }} />
+      <ErrorPopup errors={errors} isOpen={showErrorPopup} onClose={handleCloseError} />
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <InputField
