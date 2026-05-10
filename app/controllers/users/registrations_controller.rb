@@ -5,8 +5,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    # JSON リクエストの場合のみ処理
-    return handle_json_request unless json_request?
+    # JSON リクエストの場合、JSON レスポンスを返す
+    return handle_json_request if json_request?
 
     build_resource(sign_up_params)
 
