@@ -5,23 +5,34 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
+    # JSON リクエストの場合のみ処理
+    return handle_json_request unless json_request?
+
     build_resource(sign_up_params)
 
     if resource.save
       sign_up(resource_name, resource)
-      if request.format.json? || request.content_type&.include?('application/json')
-        render json: { success: true, user: resource }, status: :created
-      else
-        redirect_to root_path, notice: 'アカウントを作成しました'
-      end
+      redirect_to root_path, notice: 'アカウントを作成しました'
     else
-      errors = resource.errors.full_messages
-      if request.format.json? || request.content_type&.include?('application/json')
-        render json: { success: false, errors: errors }, status: :unprocessable_entity
-      else
-        flash[:alert] = errors.join(', ')
-        render :new
-      end
+      flash[:alert] = resource.errors.full_messages.join(', ')
+      render :new
+    end
+  end
+
+  private
+
+  def json_request?
+    request.format.json? || request.content_type&.include?('application/json')
+  end
+
+  def handle_json_request
+    build_resource(sign_up_params)
+
+    if resource.save
+      sign_up(resource_name, resource)
+      render json: { success: true, user: resource }, status: :created
+    else
+      render json: { success: false, errors: resource.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
