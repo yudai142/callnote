@@ -7,7 +7,7 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     # For JSON requests, use custom authentication logic
-    if request.format.json?
+    if json_request?
       email = params[:user][:email]
       password = params[:user][:password]
 
