@@ -7,21 +7,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params)
 
-    resource.save
-    if resource.persisted?
+    if resource.save
       sign_up(resource_name, resource)
-      respond_to do |format|
-        format.json { render json: { success: true, user: resource }, status: :created }
-        format.html { redirect_to root_path, notice: 'アカウントを作成しました' }
+      if request.format.json? || request.content_type&.include?('application/json')
+        render json: { success: true, user: resource }, status: :created
+      else
+        redirect_to root_path, notice: 'アカウントを作成しました'
       end
     else
       errors = resource.errors.full_messages
-      respond_to do |format|
-        format.json { render json: { success: false, errors: errors }, status: :unprocessable_entity }
-        format.html do
-          flash[:alert] = errors.join(', ')
-          render :new
-        end
+      if request.format.json? || request.content_type&.include?('application/json')
+        render json: { success: false, errors: errors }, status: :unprocessable_entity
+      else
+        flash[:alert] = errors.join(', ')
+        render :new
       end
     end
   end
