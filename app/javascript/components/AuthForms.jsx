@@ -105,18 +105,12 @@ export function LoginForm({ onSwitchToSignup }) {
         body: JSON.stringify(data)
       });
 
-      console.log('Login response status:', response.status, 'ok:', response.ok);
-
       if (response.ok) {
-        console.log('Login successful, redirecting to /');
         window.location.href = '/';
       } else {
-        console.log('Login failed, showing error popup');
         const result = await response.json();
-        console.log('Error response:', result);
         // Handle both custom format { success: false, errors: [...] } and Devise default format { error: "..." }
         const errorList = result.errors || (result.error ? [result.error] : ['ログインに失敗しました']);
-        console.log('Setting errors:', errorList);
         setErrors(errorList);
         setShowErrorPopup(true);
       }
