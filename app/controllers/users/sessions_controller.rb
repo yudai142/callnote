@@ -32,7 +32,7 @@ class Users::SessionsController < Devise::SessionsController
     if request.format.json?
       render json: { success: true }, status: :ok
     else
-      redirect_to new_user_session_path, notice: 'ログアウトしました'
+      redirect_to root_path, notice: 'ログアウトしました'
     end
   end
 
