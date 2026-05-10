@@ -33,7 +33,6 @@ function ErrorPopup({ errors, isOpen, onClose }) {
   if (!isOpen || !errors || errors.length === 0) return null;
 
   const handleClose = () => {
-    console.log('Close button clicked');
     onClose();
   };
 
@@ -206,12 +205,7 @@ export function SignupForm({ onSwitchToLogin }) {
         body: JSON.stringify(data)
       });
 
-      console.log('Registration response status:', response.status);
-      console.log('Registration response headers:', response.headers.get('content-type'));
-
       if (response.ok) {
-        const result = await response.json();
-        console.log('Registration success:', result);
         window.location.href = '/';
       } else {
         const contentType = response.headers.get('content-type');
