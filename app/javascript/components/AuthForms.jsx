@@ -32,9 +32,22 @@ function SubmitButton({ label, loading = false }) {
 function ErrorPopup({ errors, isOpen, onClose }) {
   if (!isOpen || !errors || errors.length === 0) return null;
 
+  const handleClose = () => {
+    console.log('Close button clicked');
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-white rounded-lg p-6 max-w-sm shadow-xl" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        className="bg-white rounded-lg p-6 max-w-sm shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+        role="alertdialog"
+      >
         <h3 className="text-lg font-semibold text-red-600 mb-3">エラーが発生しました</h3>
         <ul className="space-y-2 mb-4">
           {errors.map((error, idx) => (
@@ -45,8 +58,14 @@ function ErrorPopup({ errors, isOpen, onClose }) {
           ))}
         </ul>
         <button
-          onClick={onClose}
-          className="w-full py-2 px-4 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+          type="button"
+          onClick={handleClose}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleClose();
+            }
+          }}
+          className="w-full py-2 px-4 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors cursor-pointer"
         >
           了解
         </button>
