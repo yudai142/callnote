@@ -103,7 +103,7 @@ export function LoginForm({ onSwitchToSignup }) {
 
   return (
     <>
-      <ErrorPopup errors={errors} onClose={() => setShowErrorPopup(false)} />
+      <ErrorPopup errors={errors} onClose={() => { setShowErrorPopup(false); setErrors([]); }} />
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <InputField
@@ -215,7 +215,7 @@ export function SignupForm({ onSwitchToLogin }) {
 
   return (
     <>
-      <ErrorPopup errors={errors} onClose={() => setShowErrorPopup(false)} />
+      <ErrorPopup errors={errors} onClose={() => { setShowErrorPopup(false); setErrors([]); }} />
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <InputField
