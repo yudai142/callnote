@@ -1,0 +1,16 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"
+    errors:
+      messages:
+        blank: "は空にすることができません"
+        taken: "はすでに存在します"
+        invalid: "は無効です"
+        too_short: "は短すぎます（最小 %{count} 字）"
+        too_long: "は長すぎます（最大 %{count} 字）"
+        wrong_length: "は不正な長さです（%{count} 字）"
+        confirmation: "が確認と一致しません"
