@@ -6,6 +6,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
+    I18n.locale = :ja
     # For JSON requests, use custom authentication logic
     if json_request?
       email = params[:user][:email]

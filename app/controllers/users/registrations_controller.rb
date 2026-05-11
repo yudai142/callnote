@@ -27,6 +27,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def handle_json_request
+    I18n.locale = :ja
     build_resource(sign_up_params)
 
     if resource.save
