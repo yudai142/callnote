@@ -2,7 +2,7 @@
 
 class Users::SessionsController < Devise::SessionsController
   skip_before_action :verify_authenticity_token, if: :json_request?
-  before_action :configure_sign_in_params, only: [:create]
+  before_action :configure_sign_in_params, only: [ :create ]
 
   # POST /resource/sign_in
   def create
@@ -19,7 +19,7 @@ class Users::SessionsController < Devise::SessionsController
         sign_in(:user, user)
         render json: { success: true, user: { id: user.id, email: user.email } }, status: :ok
       else
-        render json: { success: false, errors: ['メールアドレスまたはパスワードが正しくありません'] }, status: :unauthorized
+        render json: { success: false, errors: [ "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u30D1\u30B9\u30EF\u30FC\u30C9\u304C\u6B63\u3057\u304F\u3042\u308A\u307E\u305B\u3093" ] }, status: :unauthorized
       end
     else
       # HTML flow - use Devise default
@@ -29,7 +29,7 @@ class Users::SessionsController < Devise::SessionsController
         sign_in(resource_name, resource)
         redirect_to root_path
       rescue Warden::InvalidCredentials
-        redirect_to new_user_session_path, alert: 'メールアドレスまたはパスワードが正しくありません'
+        redirect_to new_user_session_path, alert: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u30D1\u30B9\u30EF\u30FC\u30C9\u304C\u6B63\u3057\u304F\u3042\u308A\u307E\u305B\u3093"
       end
     end
   end
@@ -41,7 +41,7 @@ class Users::SessionsController < Devise::SessionsController
     if json_request?
       render json: { success: true }, status: :ok
     else
-      redirect_to root_path, notice: 'ログアウトしました'
+      redirect_to root_path, notice: "\u30ED\u30B0\u30A2\u30A6\u30C8\u3057\u307E\u3057\u305F"
     end
   end
 
@@ -50,13 +50,13 @@ class Users::SessionsController < Devise::SessionsController
   def json_request?
     # Check if request explicitly wants JSON
     request.format.json? ||
-    request.content_type&.include?('application/json')
+    request.content_type&.include?("application/json")
   end
 
   protected
 
   def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password ])
   end
 
   def auth_options
