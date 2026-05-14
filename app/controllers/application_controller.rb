@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  allow_browser versions: :modern, block: :log
 
   # CSRF protection: skip for API requests and tests
   protect_from_forgery unless: :api_or_test_request?
