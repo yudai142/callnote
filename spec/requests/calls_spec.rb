@@ -11,7 +11,7 @@ RSpec.describe "Calls API", type: :request do
         create(:call, user: other_user)
 
         sign_in user
-        get "/calls"
+        get "/calls", as: :json
 
         expect(response).to have_http_status(:ok)
         body = JSON.parse(response.body)
@@ -26,7 +26,7 @@ RSpec.describe "Calls API", type: :request do
         call3 = create(:call, user: user, created_at: Time.current)
 
         sign_in user
-        get "/calls"
+        get "/calls", as: :json
 
         body = JSON.parse(response.body)
         expect(body.map { |c| c["id"] }).to eq([ call3.id, call2.id, call1.id ])
@@ -35,7 +35,7 @@ RSpec.describe "Calls API", type: :request do
 
     context "when not authenticated" do
       it "returns 401 Unauthorized" do
-        get "/calls"
+        get "/calls", as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe "Calls API", type: :request do
         sign_in user
 
         expect {
-          post "/calls", params: {
+          post "/calls", as: :json, params: {
             call: {
               title: "Test Call",
               started_at: 1.hour.ago,
@@ -66,7 +66,7 @@ RSpec.describe "Calls API", type: :request do
       it "returns error when audio is missing" do
         sign_in user
 
-        post "/calls", params: {
+        post "/calls", as: :json, params: {
           call: {
             title: "Test Call"
           }
@@ -80,7 +80,7 @@ RSpec.describe "Calls API", type: :request do
       it "associates call with current user" do
         sign_in user
 
-        post "/calls", params: {
+        post "/calls", as: :json, params: {
           call: {
             title: "Test Call",
             audio: fixture_file_upload("test_audio.wav", "audio/wav")
@@ -94,7 +94,7 @@ RSpec.describe "Calls API", type: :request do
 
     context "when not authenticated" do
       it "returns 401 Unauthorized" do
-        post "/calls", params: { call: { title: "Test" } }
+        post "/calls", as: :json, params: { call: { title: "Test" } }
         expect(response).to have_http_status(:unauthorized)
       end
     end
