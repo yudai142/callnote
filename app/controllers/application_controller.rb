@@ -2,8 +2,10 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern, block: :log
 
-  # CSRF protection: skip for API requests and tests
-  protect_from_forgery unless: :api_or_test_request?
+  # Skip CSRF verification in test environment
+  skip_before_action :verify_authenticity_token, if: -> { Rails.env.test? }
+  # Skip CSRF verification for JSON/API requests
+  skip_before_action :verify_authenticity_token, if: :json_request?
 
   protected
 
@@ -15,15 +17,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def api_or_test_request?
-    json_request? || test_request?
-  end
-
   def json_request?
     request.format.json? || request.content_type&.include?("application/json") || request.path.start_with?("/calls")
-  end
-
-  def test_request?
-    Rails.env.test?
   end
 end
