@@ -66,6 +66,11 @@ RSpec.configure do |config|
   # Include Devise test helpers for request specs
   config.include Devise::Test::IntegrationHelpers, type: :request
 
+  # Disable CSRF verification for request specs
+  config.before(:each, type: :request) do
+    ActionController::Base.skip_before_action :verify_authenticity_token
+  end
+
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
