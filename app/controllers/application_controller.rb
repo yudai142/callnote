@@ -2,8 +2,8 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
-  # Skip CSRF verification for API endpoints when JSON request
-  skip_before_action :verify_authenticity_token, if: :json_request?
+  # Skip CSRF verification for API endpoints or when JSON request
+  protect_from_forgery with: :null_session, unless: :json_request?
 
   protected
 
@@ -16,6 +16,6 @@ class ApplicationController < ActionController::Base
   private
 
   def json_request?
-    request.format.json?
+    request.format.json? || request.content_type&.include?("application/json")
   end
 end
