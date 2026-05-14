@@ -106,7 +106,7 @@ RSpec.describe "Calls API", type: :request do
         call = create(:call, user: user)
         sign_in user
 
-        get "/calls/#{call.id}"
+        get "/calls/#{call.id}", as: :json
 
         expect(response).to have_http_status(:ok)
         body = JSON.parse(response.body)
@@ -116,7 +116,7 @@ RSpec.describe "Calls API", type: :request do
 
       it "returns 404 when call not found" do
         sign_in user
-        get "/calls/99999"
+        get "/calls/99999", as: :json
         expect(response).to have_http_status(:not_found)
       end
 
@@ -124,7 +124,7 @@ RSpec.describe "Calls API", type: :request do
         call = create(:call, user: other_user)
         sign_in user
 
-        get "/calls/#{call.id}"
+        get "/calls/#{call.id}", as: :json
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -132,7 +132,7 @@ RSpec.describe "Calls API", type: :request do
     context "when not authenticated" do
       it "returns 401 Unauthorized" do
         call = create(:call, user: user)
-        get "/calls/#{call.id}"
+        get "/calls/#{call.id}", as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -145,7 +145,7 @@ RSpec.describe "Calls API", type: :request do
         sign_in user
 
         expect {
-          delete "/calls/#{call.id}"
+          delete "/calls/#{call.id}", as: :json
         }.to change(Call, :count).by(-1)
 
         expect(response).to have_http_status(:no_content)
@@ -153,7 +153,7 @@ RSpec.describe "Calls API", type: :request do
 
       it "returns 404 when call not found" do
         sign_in user
-        delete "/calls/99999"
+        delete "/calls/99999", as: :json
         expect(response).to have_http_status(:not_found)
       end
 
@@ -161,7 +161,7 @@ RSpec.describe "Calls API", type: :request do
         call = create(:call, user: other_user)
         sign_in user
 
-        delete "/calls/#{call.id}"
+        delete "/calls/#{call.id}", as: :json
         expect(response).to have_http_status(:not_found)
         expect(Call.exists?(call.id)).to be true
       end
@@ -170,7 +170,7 @@ RSpec.describe "Calls API", type: :request do
     context "when not authenticated" do
       it "returns 401 Unauthorized" do
         call = create(:call, user: user)
-        delete "/calls/#{call.id}"
+        delete "/calls/#{call.id}", as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -182,14 +182,14 @@ RSpec.describe "Calls API", type: :request do
         call = create(:call, user: user)
         sign_in user
 
-        get "/calls/#{call.id}/audio"
+        get "/calls/#{call.id}/audio", as: :json
 
         expect(response).to have_http_status(:redirect)
       end
 
       it "returns 404 when call not found" do
         sign_in user
-        get "/calls/99999/audio"
+        get "/calls/99999/audio", as: :json
         expect(response).to have_http_status(:not_found)
       end
 
@@ -197,7 +197,7 @@ RSpec.describe "Calls API", type: :request do
         call = create(:call, user: other_user)
         sign_in user
 
-        get "/calls/#{call.id}/audio"
+        get "/calls/#{call.id}/audio", as: :json
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -205,7 +205,7 @@ RSpec.describe "Calls API", type: :request do
     context "when not authenticated" do
       it "returns 401 Unauthorized" do
         call = create(:call, user: user)
-        get "/calls/#{call.id}/audio"
+        get "/calls/#{call.id}/audio", as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
