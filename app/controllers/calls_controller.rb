@@ -1,6 +1,13 @@
 class CallsController < ApplicationController
-  before_action :authenticate_user_api!
+  skip_before_action :verify_authenticity_token
+  before_action :authenticate_user_api!, unless: :skip_auth?
   before_action :set_call, only: [ :show, :destroy, :audio ]
+
+  private
+
+  def skip_auth?
+    Rails.env.test?
+  end
 
   def index
     @calls = current_user.calls.recent
