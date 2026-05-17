@@ -7,7 +7,7 @@ RSpec.describe "Calls API", type: :request do
     it "returns user's calls with debug info" do
       sign_in user
       get "/calls", as: :json
-      
+
       puts "Response status: #{response.status}"
       puts "Response body: #{response.body}"
       puts "User signed in: #{user_signed_in?}"

@@ -1,5 +1,4 @@
 class CallsController < ApplicationController
-  skip_before_action :verify_authenticity_token
   before_action :authenticate_user_api!, unless: :skip_auth?
   before_action :set_call, only: [ :show, :destroy, :audio ]
 
