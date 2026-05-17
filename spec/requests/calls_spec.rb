@@ -47,14 +47,14 @@ RSpec.describe "Calls API", type: :request do
         sign_in user
 
         expect {
-          post "/calls", as: :json, params: {
+          post "/calls", params: {
             call: {
               title: "Test Call",
               started_at: 1.hour.ago,
               ended_at: Time.current,
               audio: fixture_file_upload("test_audio.wav", "audio/wav")
             }
-          }
+          }, headers: { "Accept" => "application/json", "Content-Type" => "application/json" }
         }.to change(Call, :count).by(1)
 
         expect(response).to have_http_status(:created)
@@ -80,12 +80,12 @@ RSpec.describe "Calls API", type: :request do
       it "associates call with current user" do
         sign_in user
 
-        post "/calls", as: :json, params: {
+        post "/calls", params: {
           call: {
             title: "Test Call",
             audio: fixture_file_upload("test_audio.wav", "audio/wav")
           }
-        }
+        }, headers: { "Accept" => "application/json", "Content-Type" => "application/json" }
 
         call = Call.last
         expect(call.user_id).to eq(user.id)

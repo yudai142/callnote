@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_user_api!
-    return if Rails.env.test? || user_signed_in?
+    return if user_signed_in?
 
     render json: { error: "認証が必要です" }, status: :unauthorized and return
   end
