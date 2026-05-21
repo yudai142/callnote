@@ -43,7 +43,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # Cloudinary for file storage in production
-gem "cloudinary", "~> 1.28"
+gem "cloudinary", "~> 2.4"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
